@@ -443,7 +443,7 @@ export default function Contact() {
                 {status === 'loading' ? 'Sending...' : 'Send Message'}
               </button>
 
-              {status === 'success' && <p className="text-[#0a1930] text-center font-bold mt-4">Message sent successfully! We will contact you soon.</p>}
+              {status === 'success' && <p className="text-[#25D366] text-center font-bold mt-4">Message sent successfully! We will contact you soon.</p>}
               {status === 'error' && <p className="text-red-600 text-center font-bold mt-4">Something went wrong. Please try again.</p>}
             </form>
           </div>

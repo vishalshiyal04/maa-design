@@ -32,7 +32,7 @@ export const siteConfig = {
   // App Download Links
   appLink:
     "https://play.google.com/store/apps/details?id=com.maaembroiderydesigns.app&pcampaignid=web_share",
-  iosLink: "https://apps.apple.com/", // <-- Your new Apple App Store link is here! Just paste the real link when you have it.
+  iosLink: "https://apps.apple.com/in/app/maa-design/id6759275584", // <-- Your new Apple App Store link is here! Just paste the real link when you have it.
 
   socials: {
     facebook: "#",
