@@ -1,56 +1,191 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
+const jwt = require("jsonwebtoken");
+const Post = require("./models/Post");
+require("dotenv").config();
 
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-// Middleware
 app.use(cors());
 app.use(express.json());
 
-// MongoDB Connection (This creates the maa-embroidery database locally)
-const MONGO_URI = "mongodb://127.0.0.1:27017/maa-embroidery";
+// ADMIN CREDENTIALS
+const MONGO_URI = process.env.MONGO_URI;
+const ADMIN_EMAIL = process.env.ADMIN_EMAIL;
+const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD;
+const JWT_SECRET = process.env.JWT_SECRET;
+
 mongoose
   .connect(MONGO_URI)
   .then(() => console.log("✅ Connected to MongoDB Successfully!"))
   .catch((err) => console.error("❌ MongoDB connection error:", err));
 
-// Define the Mongoose Schema for the Form
+// --- ADMIN LOGIN ---
+app.post("/api/admin/login", (req, res) => {
+  const { email, password } = req.body;
+  if (email === ADMIN_EMAIL && password === ADMIN_PASSWORD) {
+    const token = jwt.sign({ role: "admin" }, JWT_SECRET, { expiresIn: "2h" });
+    res
+      .status(200)
+      .json({ success: true, token, message: "Login Successful!" });
+  } else {
+    res
+      .status(401)
+      .json({ success: false, message: "Invalid Email or Password!" });
+  }
+});
+
+// ==========================================
+// 1. INQUIRY SYSTEM
+// ==========================================
 const inquirySchema = new mongoose.Schema({
   name: { type: String, required: true },
   email: { type: String, required: true },
   phone: { type: String, required: true },
   message: { type: String },
   createdAt: { type: Date, default: Date.now },
+  status: { type: String, default: "Pending" },
 });
-
 const Inquiry = mongoose.model("Inquiry", inquirySchema);
 
-// Basic Health Check Route
-app.get("/api/health", (req, res) => {
-  res.json({ message: "Maa Embroidery API is running securely." });
-});
+app.get("/api/health", (req, res) => res.json({ message: "API running." }));
 
-// The POST Route to handle contact form submissions
 app.post("/api/contact", async (req, res) => {
   try {
-    const { name, email, phone, message } = req.body;
-
-    const newInquiry = new Inquiry({ name, email, phone, message });
+    const newInquiry = new Inquiry(req.body);
     await newInquiry.save();
-
-    console.log("New message received from:", name);
-    res
-      .status(201)
-      .json({ success: true, message: "Inquiry saved successfully" });
+    res.status(201).json({ success: true, message: "Saved" });
   } catch (error) {
-    console.error("Error saving inquiry:", error);
-    res.status(500).json({ success: false, message: "Server Error" });
+    res.status(500).json({ success: false });
   }
 });
 
-// Start the server
+app.get("/api/inquiries", async (req, res) => {
+  try {
+    const inquiries = await Inquiry.find().sort({ createdAt: -1 });
+    res.status(200).json(inquiries);
+  } catch (error) {
+    res.status(500).json({ success: false });
+  }
+});
+
+app.patch("/api/inquiries/:id/status", async (req, res) => {
+  try {
+    await Inquiry.findByIdAndUpdate(req.params.id, { status: req.body.status });
+    res.status(200).json({ success: true });
+  } catch (error) {
+    res.status(500).json({ success: false });
+  }
+});
+
+app.delete("/api/inquiries/:id", async (req, res) => {
+  try {
+    await Inquiry.findByIdAndDelete(req.params.id);
+    res.status(200).json({ success: true });
+  } catch (error) {
+    res.status(500).json({ success: false });
+  }
+});
+
+// ==========================================
+// 2. BLOG SYSTEM
+// ==========================================
+app.post("/api/blogs", async (req, res) => {
+  try {
+    const newPost = new Post(req.body);
+    await newPost.save();
+    res.status(201).json({ success: true, post: newPost });
+  } catch (error) {
+    res.status(500).json({ success: false });
+  }
+});
+
+app.get("/api/blogs", async (req, res) => {
+  try {
+    const posts = await Post.find().sort({ createdAt: -1 });
+    res.status(200).json(posts);
+  } catch (error) {
+    res.status(500).json({ success: false });
+  }
+});
+
+app.put("/api/blogs/:id", async (req, res) => {
+  try {
+    const updated = await Post.findByIdAndUpdate(req.params.id, req.body, {
+      new: true,
+    });
+    res.status(200).json({ success: true, post: updated });
+  } catch (error) {
+    res.status(500).json({ success: false });
+  }
+});
+
+app.delete("/api/blogs/:id", async (req, res) => {
+  try {
+    await Post.findByIdAndDelete(req.params.id);
+    res.status(200).json({ success: true });
+  } catch (error) {
+    res.status(500).json({ success: false });
+  }
+});
+
+// ==========================================
+// 3. ✅ NEW: GALLERY SYSTEM
+// ==========================================
+const gallerySchema = new mongoose.Schema({
+  title: { type: String, required: true },
+  category: { type: String, required: true },
+  image: { type: String, required: true },
+  createdAt: { type: Date, default: Date.now },
+});
+const GalleryItem = mongoose.model("Gallery", gallerySchema);
+
+// Naya photo add karne ke liye
+app.post("/api/gallery", async (req, res) => {
+  try {
+    const newItem = new GalleryItem(req.body);
+    await newItem.save();
+    res.status(201).json({ success: true, item: newItem });
+  } catch (error) {
+    res.status(500).json({ success: false, message: "Error adding image" });
+  }
+});
+
+// Saari photos frontend par dikhane ke liye
+app.get("/api/gallery", async (req, res) => {
+  try {
+    const items = await GalleryItem.find().sort({ createdAt: -1 });
+    res.status(200).json(items);
+  } catch (error) {
+    res.status(500).json({ success: false, message: "Error fetching images" });
+  }
+});
+
+// Photo delete karne ke liye
+app.delete("/api/gallery/:id", async (req, res) => {
+  try {
+    await GalleryItem.findByIdAndDelete(req.params.id);
+    res.status(200).json({ success: true, message: "Image deleted" });
+  } catch (error) {
+    res.status(500).json({ success: false, message: "Error deleting image" });
+  }
+});
+
+app.put("/api/gallery/:id", async (req, res) => {
+  try {
+    const updatedItem = await GalleryItem.findByIdAndUpdate(
+      req.params.id,
+      req.body,
+      { new: true },
+    );
+    res.status(200).json({ success: true, item: updatedItem });
+  } catch (error) {
+    res.status(500).json({ success: false, message: "Error updating image" });
+  }
+});
+
 app.listen(PORT, () => {
   console.log(`🚀 Server running on port ${PORT}`);
 });

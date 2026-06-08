@@ -1,58 +1,65 @@
 # 🧵 Maa Embroidery Design — Web Platform
 
-> A premium, fully responsive React web application built for **Maa Embroidery Design**.
-> Designed to perfectly mirror the aesthetic of the official mobile app, featuring a clean
-> **Navy Blue (`#0a1930`) and White** theme.
+> A premium, fully responsive **MERN-stack** web application built for **Maa Embroidery Design**.
+> Designed with a clean **Navy Blue (`#0a1930`) and White** theme, mirroring the official mobile application aesthetic.
 
 ---
 
-## ✨ Features
+## ✨ Advanced Features
 
-- **Responsive Design** — 100% mobile, tablet, and desktop friendly layout.
-- **Premium Brand Theme** — Custom Deep Navy Blue and bright blue accent UI matching the official mobile application.
-- **Dynamic Configuration** — Centralized `siteData.js` file to easily update business details (phone, email, address, app links) without touching core UI components.
-- **Hero Image Slider** — Custom slanted-edge image slider on desktop that gracefully transforms into a stacked mobile layout.
-- **App Download Section** — Integrated Google Play and Apple App Store buttons with side-by-side layout and glowing accent backgrounds.
-- **Interactive Contact Form** — Fully styled form ready to communicate with a Node.js backend, featuring loading states and success/error handling.
-- **Google Maps Integration** — Embedded interactive map perfectly pinpointing the shop location.
+- **Dynamic Content Management (CMS)** — Publish blogs and manage gallery images directly from the Admin Panel without touching any code.
+- **Lead Management Panel** — Track, review, and manage all customer leads submitted through the website contact form.
+- **Secure Authentication** — JWT (JSON Web Token) based secure Admin Dashboard access.
+- **Dynamic SEO** — SEO-ready pages powered by `react-helmet-async` for better search engine visibility.
+- **Production-Ready** — High performance build using Tailwind CSS and Vite.
 
 ---
 
-## 🛠️ Technologies Used
+## 🛠️ Tech Stack
 
 | Layer | Technology |
 |---|---|
-| Frontend Framework | React 18 |
-| Build Tool | Vite |
-| Styling | Tailwind CSS |
-| Icons | `react-icons` (FontAwesome integration) |
+| Frontend | React 18, Vite, Tailwind CSS |
+| Backend | Node.js, Express |
+| Database | MongoDB, Mongoose |
+| Security | JWT (JSON Web Token) |
 
 ---
 
-## 📂 Project Structure
+## 📂 Updated Project Structure
 
 ```
-frontend/
-├── public/
-│   └── logo.jpeg                  # Browser tab icon (Favicon)
-├── src/
-│   ├── assets/                    # Local images (main-image.jpeg, app screenshots, etc.)
-│   ├── components/                # React UI Components
-│   │   ├── Header.jsx             # Sticky navigation with mobile hamburger menu
-│   │   ├── HeroSlider.jsx         # Landing page animated image slider
-│   │   ├── About.jsx              # Business description section
-│   │   ├── Gallery.jsx            # Product display grid
-│   │   ├── AppDownload.jsx        # Play Store & App Store links
-│   │   ├── Contact.jsx            # Contact form & Google Map embed
-│   │   └── Footer.jsx             # Bottom navigation & copyright
-│   ├── config/
-│   │   └── siteData.js            # Centralized business information
-│   ├── App.jsx                    # Main application layout
-│   ├── main.jsx                   # React DOM rendering
-│   └── index.css                  # Global Tailwind imports & custom CSS
-├── index.html                     # Main HTML template
-├── tailwind.config.js             # Tailwind configuration
-└── package.json                   # Project dependencies
+root/
+├── backend/
+│   ├── models/                    # MongoDB Schemas
+│   │   ├── Post.js                # Blog post schema
+│   │   ├── Inquiry.js             # Contact/Lead schema
+│   │   └── Gallery.js             # Gallery image schema
+│   ├── server.js                  # Express Server & API Routes
+│   └── .env                       # Environment Variables
+│
+├── frontend/
+│   ├── public/
+│   │   └── logo.jpeg              # Favicon
+│   ├── src/
+│   │   ├── components/            # UI Components
+│   │   │   ├── Header.jsx
+│   │   │   ├── HeroSlider.jsx
+│   │   │   ├── About.jsx
+│   │   │   ├── Gallery.jsx
+│   │   │   ├── Blogs.jsx
+│   │   │   ├── AdminPanel.jsx
+│   │   │   ├── AppDownload.jsx
+│   │   │   ├── Contact.jsx
+│   │   │   └── Footer.jsx
+│   │   ├── config/
+│   │   │   └── siteData.js        # Centralized Business Info
+│   │   ├── App.jsx                # Routing, Auth Logic, and Admin Views
+│   │   ├── main.jsx               # React DOM rendering
+│   │   └── index.css              # Global Tailwind imports & custom CSS
+│   ├── index.html
+│   ├── tailwind.config.js
+│   └── package.json
 ```
 
 ---
@@ -61,77 +68,83 @@ frontend/
 
 ### Prerequisites
 
-Make sure you have [Node.js](https://nodejs.org/) (v18+) installed on your machine.
+Make sure you have [Node.js](https://nodejs.org/) (v18+) and [MongoDB](https://www.mongodb.com/) installed on your machine.
 
-### 1. Install Dependencies
-
-Open your terminal, navigate to the `frontend` folder, and run:
+### 1. Backend Setup
 
 ```bash
+cd backend
 npm install
+node server.js
 ```
 
-### 2. Start the Development Server
+**Create a `.env` file inside the `backend/` folder:**
+
+```env
+PORT=5000
+MONGODB_URI=your_mongodb_connection_string
+JWT_SECRET=your_super_secret_key
+CLIENT_URL=http://localhost:5173
+NODE_ENV=development
+```
+
+### 2. Frontend Setup
 
 ```bash
+cd frontend
+npm install
 npm run dev
 ```
 
-Open your browser and navigate to the local link provided (usually `http://localhost:5173`).
+Open your browser at `http://localhost:5173`.
 
 ### 3. Build for Production
 
 ```bash
+cd frontend
 npm run build
 ```
 
-The optimized output will be in the `dist/` folder, ready to deploy.
+The optimized output will be available in the `dist/` folder.
 
 ---
 
-## 📝 Configuration Guide
+## 🛡️ Admin Dashboard Security
 
-You do not need to hunt through the code to change your phone number, email, or social links.
-All core business data is stored in one place.
+The Admin Panel is fully protected and hidden from regular users.
 
-Open `src/config/siteData.js` to update:
+| Detail | Value |
+|---|---|
+| **Secret Path** | Hidden lock icon located in the Footer |
+| **Default Email** | `Your-Email-ID` |
+| **Default Password** | `your-Password` |
+| **Session Type** | JWT token-based authentication |
 
-```js
-export const siteConfig = {
-  brandName: "Maa Embroidery Design",
-  tagline: "Crafting Stories Through Every Stitch",
-
-  // --- Contact ---
-  phone: "+91 8758588358",
-  email: "maadesignsembroidery@gmail.com",
-  whatsapp: "https://wa.me/918758588358",
-
-  // --- Address ---
-  address: "11, Surdhara Complex, Nr. Sardar Mall, Nikol Gam Road, Thakkar Nagar, Ahmedabad - 382350",
-
-  // --- App Store Links ---
-  playStoreLink: "https://play.google.com/store/apps/details?id=com.maaembroiderydesigns.app&pcampaignid=web_share",
-  appStoreLink: "https://apps.apple.com/your-app-link", // Update when available
-
-  // --- Social Media ---
-  facebook: "https://facebook.com/your-page",
-  instagram: "https://instagram.com/your-handle",
-};
-```
+> ⚠️ **Important:** Always change the default credentials in `server.js` before deploying to production.
 
 ---
 
-## 🔗 Backend Connection (Contact Form)
+## 🚀 Key API Endpoints
 
-The contact form in `Contact.jsx` is configured to send `POST` requests to a Node.js backend.
+| Method | Endpoint | Description |
+|---|---|---|
+| `POST` | `/api/admin/login` | Admin Authentication |
+| `GET` | `/api/inquiries` | Fetch all customer leads |
+| `PATCH` | `/api/inquiries/:id/status` | Update lead status |
+| `DELETE` | `/api/inquiries/:id` | Remove a lead |
+| `GET` | `/api/blogs` | Fetch all blog posts |
+| `POST` | `/api/blogs` | Create a new blog post |
+| `PUT` | `/api/blogs/:id` | Edit an existing blog post |
+| `DELETE` | `/api/blogs/:id` | Delete a blog post |
+| `GET` | `/api/gallery` | Fetch all gallery images |
+| `POST` | `/api/gallery` | Add a photo to gallery |
+| `DELETE` | `/api/gallery/:id` | Remove a gallery image |
 
-**Endpoint:**
+---
 
-```
-POST http://localhost:5000/api/contact
-```
+## 🔗 Contact Form Payload
 
-**Request Payload:**
+The contact form sends a `POST` request to `/api/inquiries` with the following structure:
 
 ```json
 {
@@ -151,51 +164,32 @@ POST http://localhost:5000/api/contact
 }
 ```
 
-> ⚠️ **Before deploying to production**, update the fetch URL in `Contact.jsx` from
-> `http://localhost:5000/api/contact` to your live production API endpoint.
-
----
-
-## 🚀 Deployment
-
-### Frontend (Vercel / Netlify)
-
-```bash
-# Build the project
-npm run build
-
-# Deploy the dist/ folder to Vercel or Netlify
-```
-
-### Backend (Node.js on Render / Railway / VPS)
-
-Ensure your `.env` file is configured:
-
-```env
-PORT=5000
-MONGODB_URI=your_mongodb_connection_string
-CLIENT_URL=https://your-frontend-domain.com
-NODE_ENV=production
-```
+> ⚠️ When deploying to a live server, update the API base URL in `Contact.jsx` from
+> `http://localhost:5000` to your production endpoint.
 
 ---
 
 ## 📱 Mobile App
 
-Download the official **Maa Design** app:
+Download the official **Maa Embroidery Design** app:
+
+[![Get it on Google Play](https://img.shields.io/badge/Google_Play-Download-green?style=for-the-badge&logo=google-play)](https://play.google.com/store/apps/details?id=com.maaembroiderydesigns.app&pcampaignid=web_share)
 
 ---
 
-## 📞 Contact
+## 📞 Support & Credits
 
 **Maa Embroidery Design Studio & Institute**
-- **Founder:** Sanjya Shiyal
-- **Phone:** [+91 87585 88358](tel:8758588358)
-- **Email:** [maadesignsembroidery@gmail.com](mailto:maadesignsembroidery@gmail.com)
-- **Address:** 11, Surdhara Complex, Nr. Sardar Mall, Nikol Gam Road, Thakkar Nagar, Ahmedabad - 382350
 
+| | |
+|---|---|
+| **Founder** | Sanjya Shiyal |
+| **Phone** | [+91 87585 88358](tel:8758588358) |
+| **Email** | [maadesignsembroidery@gmail.com](mailto:maadesignsembroidery@gmail.com) |
+| **Address** | 11, Surdhara Complex, Nr. Sardar Mall, Nikol Gam Road, Ahmedabad |
+ **Developed By** | Vishal Shiyal |
 ---
 
 ## 📄 License
 
-© 2025 **Maa Embroidery Design**. All rights reserved.
+© 2026 **Maa Embroidery Design**. All rights reserved.

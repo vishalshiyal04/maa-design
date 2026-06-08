@@ -1,35 +1,39 @@
+import React, { useState, useEffect } from 'react';
 import { FaArrowLeft, FaCalendarAlt, FaUserEdit } from 'react-icons/fa';
 
 export default function Blogs() {
-  const dummyBlogs = [
-    {
-      id: 1,
-      title: "Top 10 Anarkali Embroidery Trends for 2026",
-      excerpt: "Discover the latest fusion of traditional motifs and modern geometric patterns dominating the Anarkali fashion scene this year.",
-      date: "May 15, 2026",
-      author: "Design Team",
-      category: "Trends",
-      image: "https://images.unsplash.com/photo-1605000797499-95a51c5269ae?auto=format&fit=crop&q=80&w=800"
-    },
-    {
-      id: 2,
-      title: "Choosing the Right Thread for 3-Piece Designs",
-      excerpt: "A comprehensive guide to selecting between rayon, polyester, and metallic threads for complex multi-layered garments.",
-      date: "May 02, 2026",
-      author: "Embroidery Expert",
-      category: "Tutorials",
-      image: "https://images.unsplash.com/photo-1584043204475-8cc101d6c77a?auto=format&fit=crop&q=80&w=800"
-    },
-    {
-      id: 3,
-      title: "How to Digitize Your Own Custom Necklines",
-      excerpt: "Learn the basics of taking a hand-drawn sketch and converting it into a machine-ready embroidery file for Kurtis.",
-      date: "April 28, 2026",
-      author: "Tech Team",
-      category: "Software",
-      image: "https://images.unsplash.com/photo-1620794341491-9f2425afc2c8?auto=format&fit=crop&q=80&w=800"
-    }
-  ];
+  // State for storing blogs and loading status
+  const [blogs, setBlogs] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  // Fetch blogs from your backend when the page loads
+  useEffect(() => {
+    const fetchBlogs = async () => {
+      try {
+        // Apne backend URL ko zaroor check karein. Agar live hai toh live URL dalein.
+        const response = await fetch('http://localhost:5000/api/blogs'); 
+        if (!response.ok) {
+          throw new Error('Failed to fetch blogs');
+        }
+        const data = await response.json();
+        setBlogs(data);
+        setLoading(false);
+      } catch (err) {
+        console.error("Error fetching blogs:", err);
+        setError("Could not load blogs at this time. Please try again later.");
+        setLoading(false);
+      }
+    };
+
+    fetchBlogs();
+  }, []);
+
+  // Format date correctly
+  const formatDate = (dateString) => {
+    const options = { year: 'numeric', month: 'short', day: 'numeric' };
+    return new Date(dateString).toLocaleDateString('en-US', options);
+  };
 
   return (
     <section className="pt-32 pb-24 px-6 bg-slate-50 min-h-screen text-[#0a1930] relative z-10">
@@ -45,36 +49,62 @@ export default function Blogs() {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {dummyBlogs.map((blog) => (
-            <article key={blog.id} className="bg-white rounded-3xl overflow-hidden shadow-lg hover:shadow-2xl transition-shadow duration-300 border border-slate-100 group flex flex-col">
-              <div className="relative h-56 overflow-hidden">
-                <img src={blog.image} alt={blog.title} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" loading="lazy" />
-                <div className="absolute top-4 left-4 bg-white/90 backdrop-blur-sm text-[#0a1930] text-xs font-black uppercase tracking-wider px-3 py-1.5 rounded-full shadow-sm">
-                  {blog.category}
+        {/* Loading State */}
+        {loading && (
+          <div className="text-center py-20 text-xl font-bold text-slate-500 animate-pulse">
+            Loading latest articles...
+          </div>
+        )}
+
+        {/* Error State */}
+        {error && (
+          <div className="text-center py-10 text-red-500 font-bold bg-red-50 rounded-xl">
+            {error}
+          </div>
+        )}
+
+        {/* Empty State (If no blogs in DB) */}
+        {!loading && !error && blogs.length === 0 && (
+          <div className="text-center py-20 text-xl font-bold text-slate-500">
+            No blogs published yet. Check back soon!
+          </div>
+        )}
+
+        {/* Actual Blogs Grid */}
+        {!loading && !error && blogs.length > 0 && (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {blogs.map((blog) => (
+              <article key={blog._id} className="bg-white rounded-3xl overflow-hidden shadow-lg hover:shadow-2xl transition-shadow duration-300 border border-slate-100 group flex flex-col">
+                <div className="relative h-56 overflow-hidden">
+                  <img src={blog.image} alt={blog.title} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" loading="lazy" />
+                  <div className="absolute top-4 left-4 bg-white/90 backdrop-blur-sm text-[#0a1930] text-xs font-black uppercase tracking-wider px-3 py-1.5 rounded-full shadow-sm">
+                    {/* Hardcoding category as DB schema doesn't have it yet, you can add it to Post.js if needed */}
+                    Embroidery
+                  </div>
                 </div>
-              </div>
-              
-              <div className="p-8 flex flex-col flex-grow">
-                <h2 className="text-2xl font-bold mb-4 hover:text-blue-600 transition-colors cursor-pointer leading-tight">
-                  {blog.title}
-                </h2>
-                <p className="text-slate-600 leading-relaxed mb-6 flex-grow">
-                  {blog.excerpt}
-                </p>
                 
-                <div className="pt-6 border-t border-slate-100 flex items-center justify-between text-sm text-slate-500 font-medium">
-                  <div className="flex items-center gap-2">
-                    <FaUserEdit className="text-blue-500" /> {blog.author}
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <FaCalendarAlt className="text-blue-500" /> {blog.date}
+                <div className="p-8 flex flex-col flex-grow">
+                  <h2 className="text-2xl font-bold mb-4 hover:text-blue-600 transition-colors cursor-pointer leading-tight">
+                    {blog.title}
+                  </h2>
+                  {/* Truncating content to act as an excerpt */}
+                  <p className="text-slate-600 leading-relaxed mb-6 flex-grow line-clamp-3">
+                    {blog.content}
+                  </p>
+                  
+                  <div className="pt-6 border-t border-slate-100 flex items-center justify-between text-sm text-slate-500 font-medium">
+                    <div className="flex items-center gap-2">
+                      <FaUserEdit className="text-blue-500" /> Admin
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <FaCalendarAlt className="text-blue-500" /> {formatDate(blog.createdAt)}
+                    </div>
                   </div>
                 </div>
-              </div>
-            </article>
-          ))}
-        </div>
+              </article>
+            ))}
+          </div>
+        )}
 
       </div>
     </section>

@@ -1,5 +1,5 @@
 import { siteConfig } from '../config/siteData';
-import { FaChevronRight, FaMapMarkerAlt, FaPhoneAlt, FaEnvelope } from 'react-icons/fa';
+import { FaChevronRight, FaMapMarkerAlt, FaPhoneAlt, FaEnvelope, FaLock } from 'react-icons/fa'; // ✅ FaLock import kiya
 
 export default function Footer() {
   return (
@@ -10,7 +10,7 @@ export default function Footer() {
 
       <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-12 mb-16 relative z-10">
         
-        {/* COLUMN 1: Navigation (Fully Working Anchor Links) */}
+        {/* COLUMN 1: Navigation */}
         <div>
           <h3 className="text-xl font-extrabold mb-8 flex items-center gap-2">
             <span className="w-8 h-1 bg-blue-500 rounded-full"></span>
@@ -52,7 +52,7 @@ export default function Footer() {
           </h3>
           <ul className="space-y-4 text-blue-100/80 font-medium">
             <li>
-              <a href="/#" className="group flex items-center gap-2 hover:text-white transition-colors">
+              <a href="/blogs" className="group flex items-center gap-2 hover:text-white transition-colors">
                 <FaChevronRight className="text-[10px] text-blue-500 opacity-0 -translate-x-4 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300" />
                 <span className="transform group-hover:translate-x-1 transition-transform duration-300">Blogs</span>
               </a>
@@ -111,9 +111,22 @@ export default function Footer() {
       {/* Bottom Copyright Section */}
       <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-4 pt-8 border-t border-white/10 text-blue-200/50 text-sm font-medium">
         <p>© {new Date().getFullYear()} {siteConfig.brandName}. All Rights Reserved.</p>
-        <p className="flex items-center gap-1">
-          Designed with <span className="text-blue-500">♥</span> for a seamless experience.
-        </p>
+        
+        {/*  Grouped the Heart text and the Secret Admin Lock together */}
+        <div className="flex items-center gap-4">
+          <p className="flex items-center gap-1">
+            Designed with <span className="text-blue-500">♥</span> for a seamless experience.
+          </p>
+          
+          {/* SECRET ADMIN BUTTON */}
+          <a 
+            href="/secret-maa-portal" 
+            className="text-blue-200/20 hover:text-blue-500 transition-colors p-2"
+            title="Admin Dashboard Access"
+          >
+            <FaLock className="text-xs" />
+          </a>
+        </div>
       </div>
     </footer>
   );
