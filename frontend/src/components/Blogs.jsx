@@ -49,7 +49,7 @@ export default function Blogs() {
           {dummyBlogs.map((blog) => (
             <article key={blog.id} className="bg-white rounded-3xl overflow-hidden shadow-lg hover:shadow-2xl transition-shadow duration-300 border border-slate-100 group flex flex-col">
               <div className="relative h-56 overflow-hidden">
-                <img src={blog.image} alt={blog.title} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
+                <img src={blog.image} alt={blog.title} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" loading="lazy" />
                 <div className="absolute top-4 left-4 bg-white/90 backdrop-blur-sm text-[#0a1930] text-xs font-black uppercase tracking-wider px-3 py-1.5 rounded-full shadow-sm">
                   {blog.category}
                 </div>

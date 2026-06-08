@@ -46,6 +46,7 @@ export default function Header() {
             src={mainImage} 
             alt="Maa Embroidery Logo" 
             className="w-10 h-10 sm:w-12 sm:h-12 rounded-full object-contain bg-white border-2 border-white shadow-lg" 
+            loading="lazy"
           />
           <div>
             <h1 className="text-lg sm:text-xl md:text-2xl font-bold tracking-wider">MAA</h1>
