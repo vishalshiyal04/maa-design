@@ -2,6 +2,9 @@ import { useState, useEffect } from 'react';
 import { siteConfig } from '../config/siteData';
 import { FaMapMarkerAlt, FaEnvelope, FaPhoneAlt, FaCheckCircle, FaSpinner } from 'react-icons/fa';
 
+// 👇 YAHAN APNA RENDER KA LIVE URL DAALEIN 👇
+const BACKEND_URL = 'https://maa-design.onrender.com';
+
 export default function Contact() {
   const [formData, setFormData] = useState({
     name: '',
@@ -9,9 +12,8 @@ export default function Contact() {
     phone: '',
     message: ''
   });
-  const [status, setStatus] = useState('idle'); // 'idle', 'loading', 'success', 'error'
+  const [status, setStatus] = useState('idle');
 
-  // This effect automatically resets the success message after 5 seconds!
   useEffect(() => {
     if (status === 'success') {
       const timer = setTimeout(() => {
@@ -32,7 +34,8 @@ export default function Contact() {
     setStatus('loading');
 
     try {
-      const response = await fetch('http://localhost:5000/api/contact', {
+      // Localhost ki jagah ab live server par request jayegi
+      const response = await fetch(`${BACKEND_URL}/api/contact`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formData)
@@ -113,7 +116,6 @@ export default function Contact() {
           {/* RIGHT SIDE: The Form */}
           <div className="lg:col-span-2 bg-white p-8 md:p-12 rounded-3xl border border-white/10 shadow-2xl relative overflow-hidden">
             
-            {/* Dynamic Success Overlay (The 2026 UI Upgrade!) */}
             {status === 'success' ? (
               <div className="absolute inset-0 bg-white/95 backdrop-blur-sm flex flex-col items-center justify-center z-30 transition-all duration-500 animate-in fade-in zoom-in-95">
                 <div className="bg-green-100 p-6 rounded-full mb-6 shadow-inner animate-bounce">
@@ -123,7 +125,6 @@ export default function Contact() {
                 <p className="text-slate-500 text-lg font-medium text-center max-w-sm">
                   Thank you for reaching out. Our team will get back to you shortly.
                 </p>
-                {/* A tiny animated progress bar showing the 5-second timeout */}
                 <div className="w-48 h-1 bg-gray-200 rounded-full mt-8 overflow-hidden">
                   <div className="h-full bg-green-500 rounded-full animate-[progress_5s_ease-in-out_forwards]"></div>
                 </div>
@@ -180,7 +181,6 @@ export default function Contact() {
                 disabled={status === 'loading'}
                 className="w-full relative overflow-hidden bg-[#0a1930] hover:bg-[#112a52] text-white font-bold text-lg py-4 rounded-xl transition-all shadow-lg shadow-[#0a1930]/20 disabled:cursor-not-allowed group flex items-center justify-center gap-3"
               >
-                {/* Glow effect on hover */}
                 <div className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-500 ease-out"></div>
                 
                 <span className="relative z-10 flex items-center gap-2">

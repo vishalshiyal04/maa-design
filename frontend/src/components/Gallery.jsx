@@ -1,5 +1,8 @@
 import React, { useState, useEffect } from 'react';
 
+// 👇 YAHAN APNA RENDER KA LIVE URL DAALEIN 👇
+const BACKEND_URL = 'https://maa-design.onrender.com'; 
+
 export default function Gallery() {
   const [galleryItems, setGalleryItems] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -7,7 +10,8 @@ export default function Gallery() {
   useEffect(() => {
     const fetchGallery = async () => {
       try {
-        const response = await fetch('http://localhost:5000/api/gallery');
+        // Localhost ki jagah ab live server se data aayega
+        const response = await fetch(`${BACKEND_URL}/api/gallery`);
         if (response.ok) {
           const data = await response.json();
           setGalleryItems(data);

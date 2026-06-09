@@ -1,18 +1,19 @@
 import React, { useState, useEffect } from 'react';
 import { FaArrowLeft, FaCalendarAlt, FaUserEdit } from 'react-icons/fa';
 
+// 👇 YAHAN APNA RENDER KA LIVE URL DAALEIN 👇
+const BACKEND_URL = 'https://maa-design.onrender.com';
+
 export default function Blogs() {
-  // State for storing blogs and loading status
   const [blogs, setBlogs] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  // Fetch blogs from your backend when the page loads
   useEffect(() => {
     const fetchBlogs = async () => {
       try {
-        // Apne backend URL ko zaroor check karein. Agar live hai toh live URL dalein.
-        const response = await fetch('http://localhost:5000/api/blogs'); 
+        // Localhost ki jagah ab live server se data aayega
+        const response = await fetch(`${BACKEND_URL}/api/blogs`); 
         if (!response.ok) {
           throw new Error('Failed to fetch blogs');
         }
@@ -29,7 +30,6 @@ export default function Blogs() {
     fetchBlogs();
   }, []);
 
-  // Format date correctly
   const formatDate = (dateString) => {
     const options = { year: 'numeric', month: 'short', day: 'numeric' };
     return new Date(dateString).toLocaleDateString('en-US', options);
@@ -49,28 +49,24 @@ export default function Blogs() {
           </div>
         </div>
 
-        {/* Loading State */}
         {loading && (
           <div className="text-center py-20 text-xl font-bold text-slate-500 animate-pulse">
             Loading latest articles...
           </div>
         )}
 
-        {/* Error State */}
         {error && (
           <div className="text-center py-10 text-red-500 font-bold bg-red-50 rounded-xl">
             {error}
           </div>
         )}
 
-        {/* Empty State (If no blogs in DB) */}
         {!loading && !error && blogs.length === 0 && (
           <div className="text-center py-20 text-xl font-bold text-slate-500">
             No blogs published yet. Check back soon!
           </div>
         )}
 
-        {/* Actual Blogs Grid */}
         {!loading && !error && blogs.length > 0 && (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {blogs.map((blog) => (
@@ -78,7 +74,6 @@ export default function Blogs() {
                 <div className="relative h-56 overflow-hidden">
                   <img src={blog.image} alt={blog.title} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" loading="lazy" />
                   <div className="absolute top-4 left-4 bg-white/90 backdrop-blur-sm text-[#0a1930] text-xs font-black uppercase tracking-wider px-3 py-1.5 rounded-full shadow-sm">
-                    {/* Hardcoding category as DB schema doesn't have it yet, you can add it to Post.js if needed */}
                     Embroidery
                   </div>
                 </div>
@@ -87,7 +82,6 @@ export default function Blogs() {
                   <h2 className="text-2xl font-bold mb-4 hover:text-blue-600 transition-colors cursor-pointer leading-tight">
                     {blog.title}
                   </h2>
-                  {/* Truncating content to act as an excerpt */}
                   <p className="text-slate-600 leading-relaxed mb-6 flex-grow line-clamp-3">
                     {blog.content}
                   </p>
