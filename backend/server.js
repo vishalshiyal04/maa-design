@@ -1,3 +1,5 @@
+/* This JavaScript code sets up a Node.js server using Express framework. Here's a breakdown of what
+the code does: */
 const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
@@ -186,6 +188,15 @@ app.put("/api/gallery/:id", async (req, res) => {
   }
 });
 
+app.use(
+  cors({
+    origin: "*", // Vercel ka live URL yahan daalein
+    methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
+  }),
+);
+
 app.listen(PORT, () => {
   console.log(`🚀 Server running on port ${PORT}`);
 });
+
+module.exports = app;
