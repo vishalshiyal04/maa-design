@@ -1,5 +1,3 @@
-/* This JavaScript code sets up a Node.js server using Express framework. Here's a breakdown of what
-the code does: */
 const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
@@ -10,10 +8,11 @@ require("dotenv").config();
 const app = express();
 const PORT = process.env.PORT || 5000;
 
+// Simple CORS local testing ke liye
 app.use(cors());
 app.use(express.json());
 
-// ADMIN CREDENTIALS
+// DATABASE CONNECTION
 const MONGO_URI = process.env.MONGO_URI;
 const ADMIN_EMAIL = process.env.ADMIN_EMAIL;
 const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD;
@@ -24,7 +23,7 @@ mongoose
   .then(() => console.log("✅ Connected to MongoDB Successfully!"))
   .catch((err) => console.error("❌ MongoDB connection error:", err));
 
-// --- ADMIN LOGIN ---
+// ADMIN LOGIN
 app.post("/api/admin/login", (req, res) => {
   const { email, password } = req.body;
   if (email === ADMIN_EMAIL && password === ADMIN_PASSWORD) {
@@ -39,9 +38,7 @@ app.post("/api/admin/login", (req, res) => {
   }
 });
 
-// ==========================================
 // 1. INQUIRY SYSTEM
-// ==========================================
 const inquirySchema = new mongoose.Schema({
   name: { type: String, required: true },
   email: { type: String, required: true },
@@ -91,9 +88,7 @@ app.delete("/api/inquiries/:id", async (req, res) => {
   }
 });
 
-// ==========================================
 // 2. BLOG SYSTEM
-// ==========================================
 app.post("/api/blogs", async (req, res) => {
   try {
     const newPost = new Post(req.body);
@@ -133,9 +128,7 @@ app.delete("/api/blogs/:id", async (req, res) => {
   }
 });
 
-// ==========================================
-// 3. ✅ NEW: GALLERY SYSTEM
-// ==========================================
+// 3. GALLERY SYSTEM
 const gallerySchema = new mongoose.Schema({
   title: { type: String, required: true },
   category: { type: String, required: true },
@@ -144,7 +137,6 @@ const gallerySchema = new mongoose.Schema({
 });
 const GalleryItem = mongoose.model("Gallery", gallerySchema);
 
-// Naya photo add karne ke liye
 app.post("/api/gallery", async (req, res) => {
   try {
     const newItem = new GalleryItem(req.body);
@@ -155,7 +147,6 @@ app.post("/api/gallery", async (req, res) => {
   }
 });
 
-// Saari photos frontend par dikhane ke liye
 app.get("/api/gallery", async (req, res) => {
   try {
     const items = await GalleryItem.find().sort({ createdAt: -1 });
@@ -165,7 +156,6 @@ app.get("/api/gallery", async (req, res) => {
   }
 });
 
-// Photo delete karne ke liye
 app.delete("/api/gallery/:id", async (req, res) => {
   try {
     await GalleryItem.findByIdAndDelete(req.params.id);
@@ -187,13 +177,6 @@ app.put("/api/gallery/:id", async (req, res) => {
     res.status(500).json({ success: false, message: "Error updating image" });
   }
 });
-
-app.use(
-  cors({
-    origin: "*", // Vercel ka live URL yahan daalein
-    methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
-  }),
-);
 
 app.listen(PORT, () => {
   console.log(`🚀 Server running on port ${PORT}`);

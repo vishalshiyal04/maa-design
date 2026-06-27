@@ -1,6 +1,9 @@
-import { useState, useEffect } from 'react';
-import { FaChevronLeft, FaChevronRight, FaHandPointRight } from 'react-icons/fa';
+import React, { useState, useEffect } from 'react';
+import { FaChevronLeft, FaChevronRight } from 'react-icons/fa';
 import { siteConfig } from '../config/siteData';
+
+// 👇 Naye 2026 Premium Icons
+import { FaPenNib, FaCut, FaLeaf, FaStar } from 'react-icons/fa';
 
 import mainImage from '../assets/main-image.jpeg';
 import design1 from '../assets/app1.jpeg'; 
@@ -22,30 +25,46 @@ export default function HeroSlider() {
   const prevSlide = () => setCurrentSlide(currentSlide === 0 ? slides.length - 1 : currentSlide - 1);
 
   return (
-    // Changed bg-[#111111] to bg-slate-50 and text-white to text-[#0a1930]
     <section className="bg-slate-50 text-[#0a1930] pt-6 lg:pt-8 pb-0 relative overflow-hidden w-full">
       <div className="max-w-[1400px] mx-auto px-4 sm:px-6 w-full">
         
         <div className="flex flex-col lg:grid lg:grid-cols-12 gap-8 items-center min-h-[auto] lg:min-h-[500px]">
           
           <div className="w-full lg:col-span-4 z-10 py-4 lg:py-12 order-2 lg:order-1">
-            <h2 className="text-3xl sm:text-4xl md:text-5xl font-black mb-6 lg:mb-10 tracking-wide text-center lg:text-left text-[#0a1930]">
+            <h2 className="text-4xl sm:text-5xl md:text-6xl font-black mb-8 tracking-wide text-center lg:text-left text-[#0a1930]">
               Embroidery <br className="hidden lg:block"/> 
-              {/* Changed yellow text to a lighter blue accent to match app */}
-              <span className="text-blue-600">design</span>
+              <span className="text-blue-600 drop-shadow-sm">design</span>
             </h2>
             
-            <ul className="space-y-3 sm:space-y-4 max-w-sm mx-auto lg:mx-0">
-              {siteConfig.services.map((service, index) => (
-                <li key={index} className="flex items-center gap-3 sm:gap-4 text-base sm:text-lg font-bold group cursor-default">
-                  {/* Changed yellow pointers to Navy Blue */}
-                  <FaHandPointRight className="text-[#0a1930] text-xl sm:text-2xl group-hover:scale-125 transition-transform duration-300 flex-shrink-0" /> 
-                  <span className="group-hover:text-blue-600 transition-colors duration-300 uppercase tracking-wider">
-                    {service}
+            {/* ========================================== */}
+            {/* 🌟 PREMIUM 2026 ANIMATED LIST 🌟 */}
+            {/* ========================================== */}
+            <div className="mt-8 space-y-4 max-w-sm mx-auto lg:mx-0">
+              {[
+                { name: "UNSTITCH DESIGN", icon: <FaPenNib className="text-xl" />, color: "text-blue-500", bg: "bg-blue-50" },
+                { name: "SUIT PIECE DESIGN", icon: <FaCut className="text-xl" />, color: "text-purple-500", bg: "bg-purple-50" },
+                { name: "KURTI DESIGN", icon: <FaLeaf className="text-xl" />, color: "text-emerald-500", bg: "bg-emerald-50" },
+                { name: "DORI DESIGN", icon: <FaStar className="text-xl" />, color: "text-orange-500", bg: "bg-orange-50" },
+              ].map((item, index) => (
+                <div 
+                  key={index}
+                  className="group flex items-center gap-5 p-3 rounded-2xl cursor-pointer transition-all duration-500 ease-out hover:bg-white hover:shadow-[0_8px_30px_rgb(0,0,0,0.08)] hover:-translate-y-1 hover:translate-x-2 border border-transparent hover:border-slate-200"
+                >
+                  <div className={`relative flex items-center justify-center w-14 h-14 rounded-2xl bg-white shadow-sm border border-slate-100 transition-transform duration-500 group-hover:scale-110 group-hover:rotate-3 overflow-hidden flex-shrink-0`}>
+                    <div className={`absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 ${item.bg}`}></div>
+                    <div className={`relative z-10 transition-colors duration-300 text-slate-400 group-hover:${item.color}`}>
+                      {item.icon}
+                    </div>
+                  </div>
+
+                  <span className="text-[#0a1930] font-extrabold text-sm sm:text-base tracking-wide relative overflow-hidden">
+                    {item.name}
+                    <span className="absolute bottom-0 left-0 w-full h-[2px] bg-gradient-to-r from-blue-500 to-purple-500 transform -translate-x-full group-hover:translate-x-0 transition-transform duration-500 ease-out"></span>
                   </span>
-                </li>
+                </div>
               ))}
-            </ul>
+            </div>
+            {/* ========================================== */}
           </div>
 
           <div className="w-full lg:col-span-8 relative h-[300px] sm:h-[400px] lg:h-[600px] flex justify-center items-center group order-1 lg:order-2 mt-2 lg:mt-0">
@@ -85,7 +104,7 @@ export default function HeroSlider() {
         </div>
       </div>
 
-      {/* Bottom Contact Bar - Now Navy Blue to match app Bottom Nav */}
+      {/* Bottom Contact Bar */}
       <div className="w-full bg-[#0a1930] border-t-4 border-blue-100 py-4 px-4 mt-8">
         <div className="max-w-[1400px] mx-auto flex flex-col lg:flex-row justify-between items-center text-sm md:text-base font-bold text-white gap-4 text-center">
           <div className="flex items-center gap-3 text-white text-lg sm:text-xl md:text-2xl tracking-widest">

@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { FaArrowLeft, FaCalendarAlt, FaUserEdit } from 'react-icons/fa';
 
-// 👇 YAHAN APNA RENDER KA LIVE URL DAALEIN 👇
-const BACKEND_URL = 'https://maa-design.onrender.com';
+const BACKEND_URL = 'http://localhost:5000';
 
 export default function Blogs() {
   const [blogs, setBlogs] = useState([]);

@@ -20,12 +20,9 @@ export const siteConfig = {
   },
 
   services: [
-    "Anarkali Design",
-    "Crop Top Design",
-    "Sarara Design",
-    "Gharara Design",
-    "3 Piece Design",
-    "Cord Set Design",
-    "Kurtis Design",
+    "UNSTICH DESIGN",
+    "SUIT PIS DESIGN",
+    "KURTI DESIGN",
+    "DORI DESIGN",
   ],
 };

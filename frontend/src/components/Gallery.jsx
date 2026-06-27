@@ -1,16 +1,19 @@
 import React, { useState, useEffect } from 'react';
 
-// 👇 YAHAN APNA RENDER KA LIVE URL DAALEIN 👇
-const BACKEND_URL = 'https://maa-design.onrender.com'; 
+// 👇 YAHAN AB LOCALHOST SET HAI 👇
+const BACKEND_URL = 'http://localhost:5000'; 
 
 export default function Gallery() {
   const [galleryItems, setGalleryItems] = useState([]);
   const [loading, setLoading] = useState(true);
+  
+  // States for Popup and Zoom
+  const [selectedImage, setSelectedImage] = useState(null);
+  const [isZoomed, setIsZoomed] = useState(false); // Naya state HD Zoom ke liye
 
   useEffect(() => {
     const fetchGallery = async () => {
       try {
-        // Localhost ki jagah ab live server se data aayega
         const response = await fetch(`${BACKEND_URL}/api/gallery`);
         if (response.ok) {
           const data = await response.json();
@@ -23,6 +26,21 @@ export default function Gallery() {
       }
     };
     fetchGallery();
+  }, []);
+
+  // Popup close karne ka function (zoom bhi reset karega)
+  const closePopup = () => {
+    setSelectedImage(null);
+    setIsZoomed(false); // Band karte waqt zoom hata do
+  };
+
+  // Keyboard se 'Escape' dabane par close karne ke liye
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.key === 'Escape') closePopup();
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
   }, []);
 
   return (
@@ -38,9 +56,11 @@ export default function Gallery() {
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {galleryItems.map((item) => (
-              <div key={item._id} className="group relative h-80 bg-white rounded-2xl overflow-hidden cursor-pointer shadow-lg border border-slate-200">
-                
-                {/* Asli Image Database Se */}
+              <div 
+                key={item._id} 
+                className="group relative h-80 bg-white rounded-2xl overflow-hidden cursor-pointer shadow-lg border border-slate-200"
+                onClick={() => setSelectedImage(item)} 
+              >
                 <img 
                   src={item.image} 
                   alt={item.title} 
@@ -48,7 +68,6 @@ export default function Gallery() {
                   loading="lazy"
                 />
                 
-                {/* Hover Overlay */}
                 <div className="absolute inset-0 bg-gradient-to-t from-[#0a1930]/90 via-[#0a1930]/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-6 text-left">
                   <span className="text-blue-400 text-xs font-bold uppercase tracking-widest mb-1">{item.category}</span>
                   <h3 className="text-2xl font-bold text-white">{item.title}</h3>
@@ -58,6 +77,62 @@ export default function Gallery() {
           </div>
         )}
       </div>
+
+      {/* ========================================== */}
+      {/* 🌟 FULL HD ZOOM LIGHTBOX START 🌟 */}
+      {/* ========================================== */}
+      {selectedImage && (
+        <div 
+          className="fixed inset-0 z-[100] bg-black/95 backdrop-blur-md animate-in fade-in duration-300"
+        >
+          {/* Close Button */}
+          <button 
+            className="absolute top-4 right-4 md:top-8 md:right-8 text-white/70 hover:text-white text-5xl font-light transition-colors z-[110]"
+            onClick={closePopup}
+          >
+            &times;
+          </button>
+          
+          {/* Zoom Instruction Hint */}
+          {!isZoomed && (
+             <div className="absolute top-6 left-1/2 -translate-x-1/2 z-[110] bg-white/10 text-white/80 px-4 py-1.5 rounded-full text-sm backdrop-blur-sm border border-white/20 pointer-events-none animate-pulse">
+               Click image for HD Zoom
+             </div>
+          )}
+
+          {/* Scrollable Container */}
+          <div 
+            className="w-full h-full overflow-auto flex items-center justify-center p-4 md:p-8 custom-scrollbar"
+            onClick={closePopup} // Bahar click karne se close hoga
+          >
+            <img 
+              src={selectedImage.image} 
+              alt={selectedImage.title} 
+              onClick={(e) => {
+                e.stopPropagation(); // Image pe click karne se popup close nahi hoga
+                setIsZoomed(!isZoomed); // Zoom In / Zoom Out Toggle
+              }}
+              className={`transition-all duration-500 ease-in-out shadow-2xl rounded-sm ${
+                isZoomed 
+                  ? 'max-w-none w-auto h-auto cursor-zoom-out' // HD View (True Size)
+                  : 'max-w-full max-h-[85vh] object-contain cursor-zoom-in' // Fit to Screen View
+              }`}
+            />
+          </div>
+
+          {/* Image Details (Neeche Text) */}
+          {!isZoomed && (
+            <div className="absolute bottom-8 left-1/2 -translate-x-1/2 text-center pointer-events-none animate-in slide-in-from-bottom-4 duration-500">
+              <span className="text-blue-400 text-sm font-black uppercase tracking-[0.2em] drop-shadow-md">{selectedImage.category}</span>
+              <h3 className="text-white text-3xl font-bold mt-2 drop-shadow-lg">{selectedImage.title}</h3>
+            </div>
+          )}
+        </div>
+      )}
+      {/* ========================================== */}
+      {/* 🌟 FULL HD ZOOM LIGHTBOX END 🌟 */}
+      {/* ========================================== */}
+
     </section>
   );
 }
