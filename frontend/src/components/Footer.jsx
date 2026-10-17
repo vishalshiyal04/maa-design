@@ -115,7 +115,7 @@ export default function Footer() {
         {/*  Grouped the Heart text and the Secret Admin Lock together */}
         <div className="flex items-center gap-4">
           <p className="flex items-center gap-1">
-            Designed by <span className="text-blue-500">♥</span> Vishal.
+            Designed by <span className="text-blue-500">♥</span> Vishal B Shiyal.
           </p>
           
           {/* SECRET ADMIN BUTTON */}
