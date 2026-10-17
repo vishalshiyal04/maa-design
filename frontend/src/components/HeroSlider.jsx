@@ -6,9 +6,10 @@ import { siteConfig } from '../config/siteData';
 import { FaPenNib, FaCut, FaLeaf, FaStar } from 'react-icons/fa';
 
 import mainImage from '../assets/main-image.jpeg';
-import design1 from '../assets/app1.jpeg'; 
-import design2 from '../assets/app2.jpeg';
-import design3 from '../assets/app3.jpeg';
+import design1 from '../assets/app5.jpeg'; 
+import design2 from '../assets/app6.jpeg';
+import design3 from '../assets/app7.jpeg';
+
 
 export default function HeroSlider() {
   const slides = [mainImage, design1, design2, design3];
@@ -119,7 +120,7 @@ export default function HeroSlider() {
           <div className="flex flex-col sm:flex-row gap-3 sm:gap-6 items-center uppercase text-[10px] sm:text-xs md:text-sm tracking-wider">
              <div className="flex items-center gap-2">
                <span className="bg-white text-[#0a1930] p-1 rounded-full text-[10px]">🌐</span>
-               WWW.MAAEMBROIDERY.IN
+               {/* WWW.MAAEMBROIDERY.IN */} https://maa-design.netlify.app/
              </div>
              <div className="flex items-center gap-2">
                <span className="bg-white text-[#0a1930] p-1 rounded-full text-[10px]">📍</span>

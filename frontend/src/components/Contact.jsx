@@ -70,7 +70,7 @@ export default function Contact() {
         </div>
 
         {/* TEXT HEADER */}
-        <div className="text-center mb-12 md:mb-16">
+        <div className="text-center mb-12 md:mb-16 pt-14">
           <h2 className="text-3xl md:text-4xl font-bold mb-4">Get In <span className="text-white">Touch</span></h2>
           <p className="text-blue-100/80">Have a question or want to discuss a custom design? We'd love to hear from you.</p>
         </div>
