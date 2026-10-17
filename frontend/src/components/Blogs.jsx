@@ -1,7 +1,7 @@
   import React, { useState, useEffect } from 'react';
   import { FaArrowLeft, FaCalendarAlt, FaUserEdit } from 'react-icons/fa';
 
-  const BACKEND_URL = 'http://localhost:5000';
+   const BACKEND_URL = import.meta.env.VITE_API_URL;
 
   export default function Blogs() {
     const [blogs, setBlogs] = useState([]);

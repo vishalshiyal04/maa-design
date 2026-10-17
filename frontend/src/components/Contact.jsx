@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { siteConfig } from '../config/siteData';
 import { FaMapMarkerAlt, FaEnvelope, FaPhoneAlt, FaCheckCircle, FaSpinner } from 'react-icons/fa';
 
-const BACKEND_URL = 'http://localhost:5000';
+   const BACKEND_URL = import.meta.env.VITE_API_URL;
 
 export default function Contact() {
   const [formData, setFormData] = useState({
